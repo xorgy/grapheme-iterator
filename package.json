@@ -1,0 +1,24 @@
+{
+  "name": "grapheme-iterator",
+  "version": "0.1.7",
+  "homepage": "https://grapheme-iterator.aaronhamilton.us/",
+  "description": "An iterator yielding each Unicode Extended Grapheme Cluster in a string.",
+  "author": {
+    "name": "Aaron Muir Hamilton",
+    "email": "aaron@correspondwith.me",
+    "url": "https://qui.suis.je/"
+  },
+  "keywords": ["Grapheme Cluster", "Extended Grapheme Cluster", "Unicode", "segmentation"],
+  "license" : "ISC",
+  "files": ["index.js", "GraphemeBreakProperty.js", "index.d.ts"],
+  "repository":  {
+    "type": "git",
+    "url": "https://github.com/xorgy/grapheme-iterator.git"
+  },
+  "scripts": {
+    "test": "node test.js"
+  },
+  "main": "grapheme-iterator",
+  "sideEffects": false,
+  "type": "module"
+}
