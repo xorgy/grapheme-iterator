@@ -1,4 +1,4 @@
-import GraphemeBreakProperty from './GraphemeBreakProperty.js'
+import {classify} from './GraphemeBreakProperty.js'
 
 const Any = 0,
       Prepend = 1,
@@ -15,18 +15,9 @@ const Any = 0,
       LVT = 12,
       ZWJ = 13;
 
-const classify = c => {
-  for (const [p, s, bs, min, max] of GraphemeBreakProperty)
-    if (c >= min && c <= max)
-      for (const b of bs)
-        if (c >= b && c <= (b + s)) return p;
-
-  return 0;
-};
-
 const grapheme_iterator = s => ({
   *[Symbol.iterator]() {
-    let pp = -1;
+    let pp = -1; // GB1
     let egc = "";
     let regionalstack = 0;
     for (const cs of s) {
@@ -91,12 +82,9 @@ const grapheme_iterator = s => ({
             egc += cs;
             break;
           }
-        case Any:
-          yield egc;
-          egc = cs;
-          break;
-        case Control: // GB4
-        case LF: // GB4
+//        case Any: // GB999
+//        case Control: // GB4
+//        case LF: // GB4
         default:
           yield egc;
           egc = cs;

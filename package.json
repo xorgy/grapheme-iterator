@@ -1,6 +1,6 @@
 {
   "name": "grapheme-iterator",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "homepage": "https://grapheme-iterator.aaronhamilton.us/",
   "description": "An iterator yielding each Unicode Extended Grapheme Cluster in a string.",
   "author": {
