@@ -25,9 +25,9 @@ const grapheme_iterator = s => ({
       const cp = classify(cc);
 
       if (cp === Extend || cp === ZWJ
-         || cp == SpacingMark /* GB9a */) {
+         || cp == SpacingMark /* GB9a */)
         egc += cs; // GB9
-      } else
+      else
         switch (pp) {
         case ZWJ:
         case Prepend: // GB9b
@@ -35,17 +35,17 @@ const grapheme_iterator = s => ({
           egc += cs;
           break;
         case Extend:
-          if (cp === Extend) {
+          if (cp === Extend)
             egc += cs;
-          } else {
+          else {
             yield egc;
             egc = cs;
           }
           break;
         case CR:
-          if (cp === LF) {
+          if (cp === LF)
             egc += cs; // GB3
-          } else {
+          else {
             yield egc;
             egc = cs; // GB4
           }
@@ -54,31 +54,31 @@ const grapheme_iterator = s => ({
           if (cp === L
               || cp === V
               || cp === LV
-              || cp === LVT) {
+              || cp === LVT)
             egc += cs;
-          } else {
+          else {
             yield egc;
             egc = cs;
           }
           break;
         case LV: case V: // GB7
-          if (cp === V || cp === T) {
+          if (cp === V || cp === T)
             egc += cs;
-          } else {
+          else {
             yield egc;
             egc = cs;
           }
           break;
         case LVT: case T: // GB8
-          if (cp === T) {
+          if (cp === T)
             egc += cs;
-          } else {
+          else {
             yield egc;
             egc = cs;
           }
           break;
         case Regional: // GB12
-          if(!(regionalstack % 2)) {
+          if (regionalstack % 2) { // GB13
             egc += cs;
             break;
           }
@@ -92,9 +92,7 @@ const grapheme_iterator = s => ({
       regionalstack = cp === Regional ? regionalstack + 1 : 0;
       pp = cp;
     }
-    if (egc !== "") {
-      yield egc; // GB2
-    }
+    if (egc !== "") yield egc; // GB2
   }
 });
 

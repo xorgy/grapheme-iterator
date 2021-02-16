@@ -19,6 +19,19 @@ const testData = readFileSync('GraphemeBreakTest.txt', 'ASCII')
         return { input, expected };
       });
 
+const emojiData = readFileSync('emoji-test.txt', 'utf-8')
+      .split('\n')
+      .filter(line =>
+        line != null && line.length > 0 && !line.startsWith('#'))
+      .map(line => line.split(';')[0])
+      .map(line =>
+        line.split(' ')
+          .filter(x => !!x.length)
+          .map(c => String.fromCodePoint(parseInt(c, 16)))
+          .join('')
+      );
+
+
 export const countGraphemes = str => {
   let count = 0;
   for (const each of grapheme_iterator(str)) count++;
@@ -45,14 +58,32 @@ for (let i in testData) {
 }
 
 if (valuefails.length !== 0)
-  for (const {casenum, grapheme, expected, result} of valuefails.slice(0,5))
+  for (const {casenum, grapheme, expected, result} of valuefails)
     console.error (`iterateGraphemes: In case ${casenum}: expected`, expected, `at grapheme ${grapheme} but got`, result, `instead.`);
 if (countfails.length !== 0)
-  for (const {casenum, grapheme, expected, result} of countfails.slice(0,5))
+  for (const {casenum, grapheme, expected, result} of countfails)
     console.error (`countGraphemes: In case ${casenum}: expected`, expected, `graphemes but got`, result, `instead.`);
 
+
+const n_emoji_tests = emojiData.length;
+const emojifails = [];
+
+for (let i in emojiData) {
+  const input = emojiData[i];
+  let [result] = grapheme_iterator(input)
+  if (result !== input)
+    emojifails.push({casenum: i, result: result, expected: input});
+}
+
+if (emojifails.length !== 0)
+  for (const {casenum, grapheme, expected, result} of emojifails)
+    console.error (`emoji: In case ${casenum}: expected`,
+                   [...expected].map(x => 'U+' + x.codePointAt(0).toString(16).toUpperCase()).join(' '),
+                   `to be one grapheme equal to the test input, but it wasn't.`);
+
 if (valuefails.length === 0 && countfails.length === 0) {
-  console.log(`All ${n_tests} tests passed.`)
+  console.log(`All ${n_tests} GraphemeBreakTest cases passed.`)
+  console.log(`All ${n_emoji_tests} Emoji test cases passed.`)
   process.exit(0);
 } else {
   console.error(`iterateGraphemes: ${valuefails.length} of ${n_tests} failed.`)
